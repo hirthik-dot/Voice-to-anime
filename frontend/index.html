@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Language MVP - Speech to Sign</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Sign Language MVP</h1>
+            <p class="subtitle">Real-time Speech to Sign Language</p>
+        </header>
+
+        <main>
+            <!-- Control Section -->
+            <section class="control-section">
+                <button id="startBtn" class="start-button">
+                    <span class="button-text">Start Listening</span>
+                    <span class="button-icon">🎤</span>
+                </button>
+                <div id="status" class="status-message"></div>
+            </section>
+
+            <!-- Output Section -->
+            <section class="output-section">
+                <div class="output-box">
+                    <h2>Transcribed Speech</h2>
+                    <div id="speechOutput" class="speech-output">Click "Start Listening" to begin...</div>
+                </div>
+
+                <div class="output-box">
+                    <h2>Sign Gloss Sequence</h2>
+                    <div id="glossOutput" class="gloss-output">
+                        <p class="placeholder">Gloss sequence will appear here...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Avatar Section (Placeholder) -->
+            <section class="avatar-section">
+                <h2>Animated Avatar (Placeholder)</h2>
+                <div id="avatarContainer" class="avatar-container">
+                    <p class="placeholder">Sign animations will appear here</p>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Built with FastAPI, Whisper, and vanilla JavaScript</p>
+        </footer>
+    </div>
+
+    <script src="avatar.js"></script>
+</body>
+</html>
+
+
