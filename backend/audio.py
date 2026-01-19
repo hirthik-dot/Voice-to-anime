@@ -71,8 +71,14 @@ def record_audio(duration=5, sample_rate=16000, channels=1, chunk_size=1024):
     audio.terminate()
     
     # Create temporary WAV file (Windows-compatible)
+    # Use unique filename to avoid conflicts with concurrent requests
     temp_dir = tempfile.gettempdir()
-    temp_file = os.path.join(temp_dir, "sign_lang_audio.wav")
+    temp_file = tempfile.NamedTemporaryFile(
+        suffix='.wav',
+        prefix='sign_lang_audio_',
+        dir=temp_dir,
+        delete=False
+    ).name
     
     # Save audio to WAV file
     with wave.open(temp_file, 'wb') as wf:

@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Language MVP - Speech to Sign</title>
-    <link rel="stylesheet" href="style.css">
+    <!-- Vite will serve this CSS file from the same folder -->
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
     <div class="container">
@@ -38,22 +39,22 @@
                 </div>
             </section>
 
-            <!-- Avatar Section (Placeholder) -->
+            <!-- Avatar Section -->
             <section class="avatar-section">
-                <h2>Animated Avatar (Placeholder)</h2>
+                <h2>Animated Avatar</h2>
                 <div id="avatarContainer" class="avatar-container">
-                    <p class="placeholder">Sign animations will appear here</p>
+                    <p class="placeholder">Loading avatar...</p>
                 </div>
             </section>
         </main>
 
         <footer>
-            <p>Built with FastAPI, Whisper, and vanilla JavaScript</p>
+            <p>Built with FastAPI, Whisper, Three.js, and Vite</p>
         </footer>
     </div>
 
-    <script src="avatar.js"></script>
+    <!-- Vite will treat this as an entry module -->
+    <script type="module" src="/avatar.js"></script>
 </body>
 </html>
-
 

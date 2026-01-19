@@ -87,6 +87,8 @@ def text_to_gloss(text):
     """
     Convert normalized text to sign language gloss sequence.
     
+    Supports both single words and multi-word phrases (e.g., "good morning").
+    
     Args:
         text: Normalized text string
     
@@ -100,11 +102,27 @@ def text_to_gloss(text):
     words = text.split()
     
     gloss_sequence = []
+    i = 0
     
-    for word in words:
-        if word:  # Skip empty strings
-            gloss_tokens = word_to_gloss(word, gloss_dict)
-            gloss_sequence.extend(gloss_tokens)
+    while i < len(words):
+        # Try to match multi-word phrases first (up to 3 words)
+        matched = False
+        for phrase_length in range(3, 0, -1):
+            if i + phrase_length <= len(words):
+                phrase = ' '.join(words[i:i + phrase_length])
+                if phrase in gloss_dict:
+                    gloss_sequence.append(gloss_dict[phrase])
+                    i += phrase_length
+                    matched = True
+                    break
+        
+        # If no phrase matched, try single word
+        if not matched:
+            word = words[i]
+            if word:  # Skip empty strings
+                gloss_tokens = word_to_gloss(word, gloss_dict)
+                gloss_sequence.extend(gloss_tokens)
+            i += 1
     
     # Add maintain sign at the end to hold the last sign
     if gloss_sequence:

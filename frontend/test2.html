@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Avatar Loading Test</title>
+
+  <!-- IMPORT MAP -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.module.js"
+      
+    }
+  }
+  </script>
+
+  <style>
+    body {
+      margin: 0;
+      background: #eeeeee;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+    h2 {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 10;
+      background: white;
+      padding: 6px;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>Avatar Loading Test</h2>
+  <div id="viewer" style="position:fixed; inset:0;"></div>
+
+  <script type="module">
+    const clock = new THREE.Clock();
+let mixer;
+
+    import * as THREE from "three";
+    import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.152.2/examples/jsm/loaders/GLTFLoader.js";
+
+    // SCENE
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xbfd1e5);
+
+    // CAMERA
+    const camera = new THREE.PerspectiveCamera(
+      45,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      100
+    );
+    camera.position.set(0, 1.4, 2.5);
+    camera.lookAt(0, 1.2, 0);
+
+    // RENDERER
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    document.getElementById("viewer").appendChild(renderer.domElement);
+
+    // LIGHTS
+    scene.add(new THREE.AmbientLight(0xffffff, 1.2));
+
+    const keyLight = new THREE.DirectionalLight(0xffffff, 2);
+    keyLight.position.set(1, 3, 2);
+    scene.add(keyLight);
+
+    const fillLight = new THREE.DirectionalLight(0xffffff, 1);
+    fillLight.position.set(-1, 2, 2);
+    scene.add(fillLight);
+
+    // GRID (DEBUG)
+    scene.add(new THREE.GridHelper(10, 10));
+
+    const loader = new GLTFLoader();
+
+loader.load("assets/avatar.glb", (gltf) => {
+  const avatar = gltf.scene;
+
+  // Center & scale
+  const box = new THREE.Box3().setFromObject(avatar);
+  const size = box.getSize(new THREE.Vector3());
+  const center = box.getCenter(new THREE.Vector3());
+
+  avatar.position.sub(center);
+  avatar.scale.setScalar(1.5 / size.y);
+  avatar.position.y = -0.75;
+
+  avatar.traverse(obj => {
+    if (obj.isMesh) {
+      obj.material.side = THREE.DoubleSide;
+    }
+  });
+
+  scene.add(avatar);
+
+  // 🔥 ANIMATION MIXER
+  mixer = new THREE.AnimationMixer(avatar);
+
+  // LOAD SIGN ANIMATION (A)
+  loader.load("assets/animations/A.glb", (animGltf) => {
+    const clip = animGltf.animations[0];
+
+    const action = mixer.clipAction(clip);
+    action.reset();
+    action.setLoop(THREE.LoopOnce);
+    action.clampWhenFinished = true;
+    action.fadeIn(0.4);        // smooth start
+    action.timeScale = 0.8;    // slightly slower (natural)
+
+    action.play();
+
+    console.log("✅ SIGN A PLAYING");
+  });
+});
+
+
+    // RENDER LOOP (ONLY ONE)
+    function animate() {
+  requestAnimationFrame(animate);
+
+  const delta = clock.getDelta();
+  if (mixer) mixer.update(delta);
+
+  renderer.render(scene, camera);
+}
+animate();
+
+
+    // RESIZE
+    window.addEventListener("resize", () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>
