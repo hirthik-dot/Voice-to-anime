@@ -237,5 +237,13 @@ Feel free to extend this MVP:
 
 ---
 
+## 📄 License
+
+© 2026 Hirthik Varma
+All rights reserved.
+
+This project is licensed under the MIT License.
+
+
 **Built with ❤️ for accessibility**
 
